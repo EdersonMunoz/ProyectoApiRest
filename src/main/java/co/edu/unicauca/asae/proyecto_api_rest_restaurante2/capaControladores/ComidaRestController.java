@@ -22,52 +22,60 @@ public class ComidaRestController {
   @Autowired
   private IComidaService comidaService;
 
-  // Listar todas las comidas
-  @GetMapping("/comidas")
+  // show: Muestra todas las comidas
+  @GetMapping("/comidas/all")
   public List<ComidaDTO> show() {
-    System.out.println("listando comidas");
+    System.out.println("show: Muestra todas las comidas");
     return comidaService.findAll();
   }
 
-  @GetMapping("/comidas/{codigo}")
+  // FindByCodigo: Muestra una comida por su codigo
+  @GetMapping("/comidas/find/{codigo}")
   public ComidaDTO FindByCodigo(@PathVariable String codigo) {
-    System.out.println("Consultando comida con codigo: " + codigo); // Para ver en consola
+    System.out.println("Consultando comida con codigo: " + codigo);
     ComidaDTO comidaDto = comidaService.findByCodigo(codigo);
     return comidaDto;
   }
 
+  // Exist: Verifica si una comida existe
   @GetMapping("/comidas/exist/{codigo}")
   public boolean Exist(@PathVariable String codigo) {
+    System.out.println(
+      "Exist: Consultando si existe la comida con codigo: " + codigo
+    );
     return comidaService.findExist(codigo);
   }
 
-  @PostMapping("/comidas")
+  // save: Guarda una comida
+  @PostMapping("/comidas/save")
   public ComidaDTO save(@RequestBody ComidaDTO comida) {
+    System.out.println(
+      "save: Guardando comida con codigo: " + comida.getCodigo()
+    );
     ComidaDTO objComidaDTO = null;
     objComidaDTO = comidaService.save(comida);
     return objComidaDTO;
   }
 
-  @PutMapping("/comidas/{codigo}")
-  public ComidaDTO update(
-    @PathVariable String codigo,
-    @RequestBody ComidaDTO comida
-  ) {
+  // update: Actualiza una comida
+  @PutMapping("/comidas/update")
+  public ComidaDTO update(@RequestBody ComidaDTO comida) {
+    String codigo = comida.getCodigo();
+    System.out.println("update: Actualizando comida con codigo: " + codigo);
     ComidaDTO objComidaDTO = null;
     ComidaDTO comidaActual = comidaService.update(codigo, comida);
     if (comidaActual != null && comidaService.findExist(codigo)) {
       objComidaDTO = comidaService.update(codigo, comida);
     } else {
-      System.out.println("El objeto enviado esta vacio o el codigo ya existe");
+      System.out.println("El objeto enviado esta vacio o ya existe");
     }
     return objComidaDTO;
   }
 
-  @DeleteMapping("/comidas/{codigo}")
+  // delete: Elimina una comida
+  @DeleteMapping("/comidas/delete/{codigo}")
   public boolean delete(@PathVariable String codigo) {
-    System.out.println(
-      "Controller delete --> Eliminando comida con codigo: " + codigo
-    );
+    System.out.println("delete: Eliminando comida con codigo: " + codigo);
     boolean band = comidaService.findExist(codigo);
     if (band) {
       band = comidaService.delete(codigo);
@@ -78,7 +86,7 @@ public class ComidaRestController {
   // listarCabeceras: Muestra las cabeceras
   @GetMapping("/comidas/listarCabeceras")
   public void listarCabeceras(@RequestHeader Map<String, String> headers) {
-    System.out.println("cabeceras");
+    System.out.println("listarCabeceras: Muestra las cabeceras");
     headers.forEach((key, value) -> {
       System.out.println(String.format("Cabecera '%s' = %s", key, value));
     });

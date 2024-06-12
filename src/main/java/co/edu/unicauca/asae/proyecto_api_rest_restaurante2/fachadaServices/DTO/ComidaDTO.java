@@ -15,7 +15,28 @@ public class ComidaDTO {
   private String nombre;
   private String tipoComida;
   private int cantidadIngredientes;
-  private float valor;
+  private float precio;
 
   public ComidaDTO() {}
+
+  @Override
+  public String toString() {
+    return (
+      "ComidaDTO [idComida=" +
+      idComida +
+      ", restaurante=" +
+      restaurante +
+      ", codigo=" +
+      codigo +
+      ", nombre=" +
+      nombre +
+      ", tipoComida=" +
+      tipoComida +
+      ", cantidadIngredientes=" +
+      cantidadIngredientes +
+      ", precio=" +
+      precio +
+      "]"
+    );
+  }
 }

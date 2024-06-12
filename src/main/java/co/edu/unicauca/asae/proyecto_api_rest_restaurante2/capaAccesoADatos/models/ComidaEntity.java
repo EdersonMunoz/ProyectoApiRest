@@ -15,7 +15,28 @@ public class ComidaEntity {
   private String nombre;
   private String tipoComida;
   private int cantidadIngredientes;
-  private float valor;
+  private float precio;
 
   public ComidaEntity() {}
+
+  @Override
+  public String toString() {
+    return (
+      "ComidaEntity [idComida=" +
+      idComida +
+      ", restaurante=" +
+      restaurante +
+      ", codigo=" +
+      codigo +
+      ", nombre=" +
+      nombre +
+      ", tipoComida=" +
+      tipoComida +
+      ", cantidadIngredientes=" +
+      cantidadIngredientes +
+      ", precio=" +
+      precio +
+      "]"
+    );
+  }
 }

@@ -22,6 +22,7 @@ public class ComidaService implements IComidaService {
   // findAll: Lista todas las comidas
   @Override
   public List<ComidaDTO> findAll() {
+    System.out.println("SERVICE findAll --> Listando todas las comidas");
     List<ComidaEntity> comidasEntity =
       this.servicioAccesoABaseDeDatos.findAll();
     List<ComidaDTO> comidasDTO =
@@ -36,14 +37,12 @@ public class ComidaService implements IComidaService {
   @Override
   public ComidaDTO findByCodigo(String codigo) {
     System.out.println(
-      "findByCodigo --> Consultando comida con codigo: " + codigo
+      "SERVICE findByCodigo --> Consultando comida con codigo: " + codigo
     );
     ComidaEntity comidaEntity =
       this.servicioAccesoABaseDeDatos.findByCodigo(codigo);
-    System.out.println("findByCodigo --> comidaEntity: " + comidaEntity);
     if (comidaEntity != null) {
       ComidaDTO comidaDTO = this.modelMapper.map(comidaEntity, ComidaDTO.class);
-      System.out.println("comidaDTO: " + comidaDTO);
       return comidaDTO;
     } else {
       throw new NotFoundException("Comida no encontrada");
@@ -53,44 +52,62 @@ public class ComidaService implements IComidaService {
   // findExist: Busca si existe una comida por su codigo
   @Override
   public boolean findExist(String codigo) {
+    System.out.println(
+      "SERVICE findExist --> Consultando si existe la comida con codigo: " +
+      codigo
+    );
     return this.servicioAccesoABaseDeDatos.findExist(codigo);
   }
 
   // save: Guarda una comida
   @Override
   public ComidaDTO save(ComidaDTO comida) {
+    System.out.println(
+      "SERVICE save --> Guardando comida: " + comida.toString()
+    );
+
     ComidaEntity comidaEntity =
       this.modelMapper.map(comida, ComidaEntity.class);
-    ComidaEntity comidaEntityActualizada =
+
+    // // Agrega la comida, si ya existe, la actualiza.
+    // ComidaEntity comidaAgregada =
+    //   this.servicioAccesoABaseDeDatos.saveOrUpdate(
+    //       comidaEntity.getCodigo(),
+    //       comidaEntity
+    //     );
+
+    ComidaEntity comidaAgregada =
       this.servicioAccesoABaseDeDatos.save(comidaEntity);
-    ComidaDTO comidaDTO =
-      this.modelMapper.map(comidaEntityActualizada, ComidaDTO.class);
+
+    ComidaDTO comidaDTO = this.modelMapper.map(comidaAgregada, ComidaDTO.class);
+
     return comidaDTO;
   }
 
   // update: Actualiza una comida
   @Override
   public ComidaDTO update(String codigo, ComidaDTO comida) {
-    ComidaEntity comidaEntity =
-      this.modelMapper.map(comida, ComidaEntity.class);
-    ComidaEntity comidaEntityActualizado =
-      this.servicioAccesoABaseDeDatos.update(codigo, comidaEntity);
-    ComidaDTO comidaDTO =
-      this.modelMapper.map(comidaEntityActualizado, ComidaDTO.class);
-    return comidaDTO;
-  }
-
-  // delete: Elimina una comida
-  @Override
-  public boolean delete(String codigo) {
-    System.out.println("delete --> Eliminando comida con codigo: " + codigo);
+    System.out.println(
+      "SERVICE update --> Actualizando comida con codigo: " + comida.getCodigo()
+    );
 
     // Verifica si existe la comida
     if (!this.servicioAccesoABaseDeDatos.findExist(codigo)) {
       throw new NotFoundException("Comida no encontrada");
     }
 
-    // Elimina la comida
-    return this.servicioAccesoABaseDeDatos.delete(codigo);
+    ComidaEntity comidaEntity =
+      this.modelMapper.map(comida, ComidaEntity.class);
+    ComidaEntity comidaEntityActualizada =
+      this.servicioAccesoABaseDeDatos.update(codigo, comidaEntity);
+
+    System.out.println(
+      "SERVICE update --> Comida actualizada: " +
+      comidaEntityActualizada.toString()
+    );
+
+    ComidaDTO comidaDTO =
+      this.modelMapper.map(comidaEntityActualizada, ComidaDTO.class);
+    return comidaDTO;
   }
 }
