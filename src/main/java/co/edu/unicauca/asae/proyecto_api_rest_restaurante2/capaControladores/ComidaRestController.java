@@ -23,7 +23,7 @@ public class ComidaRestController {
   private IComidaService comidaService;
 
   // show: Muestra todas las comidas
-  @GetMapping("/comidas/all")
+  @GetMapping("/comidas/list")
   public List<ComidaDTO> show() {
     System.out.println("show: Muestra todas las comidas");
     return comidaService.findAll();
