@@ -110,4 +110,21 @@ public class ComidaService implements IComidaService {
       this.modelMapper.map(comidaEntityActualizada, ComidaDTO.class);
     return comidaDTO;
   }
+
+  @Override
+  public boolean delete(String codigo) {
+    System.out.println(
+      "\n\n\n SERVICE TEST delete --> Eliminando comida con codigo: " +
+      codigo +
+      "\n\n\n"
+    );
+
+    // Verifica si existe la comida
+    if (!this.servicioAccesoABaseDeDatos.findExist(codigo)) {
+      throw new NotFoundException("Comida no encontrada");
+    }
+
+    this.servicioAccesoABaseDeDatos.delete(codigo);
+    return true;
+  }
 }
